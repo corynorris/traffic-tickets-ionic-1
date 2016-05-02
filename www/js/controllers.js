@@ -1,10 +1,3 @@
-// ToDo
-// - show ads
-// - fix server (to allow adding a ticket via get)
-// - sanitize addTicket
-// - splashscreen?
-// - tidy code?
-
 function serialize(obj) {
     var str = [];
     for (var p in obj)
@@ -21,7 +14,6 @@ app.controller('MapCtrl', function($scope, $http, localStorageService) {
     var map;
     var heatmap;
     var points = [];
-    var useWeightedData = true;
     // google.maps.event.addDomListener(window, 'load', initialize);
     google.maps.event.addDomListener(window, 'load', initialize());
 
@@ -77,9 +69,6 @@ app.controller('MapCtrl', function($scope, $http, localStorageService) {
             heatmap.set('gradient', null);
         }
 
-        // Weighted Data
-        useWeightedData = localStorageService.get('options').weightData;
-
     }
 
 
@@ -108,25 +97,8 @@ app.controller('MapCtrl', function($scope, $http, localStorageService) {
                 points = [];
 
                 for (var i = 0; i < data.length; i++) {
-                    var newPoint = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+                    points[i] = new google.maps.LatLng(data[i].latitude, data[i].longitude);
 
-                    // because not all data is filled out
-                    var weight = 1;
-                    if (data[i].last_date != null) {
-                        console.log(data[i].last_date);
-                        var date = new Date(data[i].last_date);
-                        console.log(date);
-
-                        //weight = new Date() - new Date(data[i].last_date);
-                    }
-                    console.log(weight);
-
-
-                    if (useWeightedData) {
-                        points[i] = { location: newPoint, weight: weight }
-                    } else {
-                        points[i] = newPoint;
-                    }
                 }
 
 
@@ -146,7 +118,6 @@ app.controller('AppCtrl', function($scope, $ionicPlatform) {
         } else if ($ionicPlatform.is('android')) {
             window.open('market://details?id=<package_name>', '_system');
         }
-
     }
 
     $scope.tweetUs = function() {
@@ -172,11 +143,7 @@ app.controller('AddTicketCtrl', function($scope, $http) {
             'https://traffic-tickets.herokuapp.com/new-ticket',
             $scope.formData
         ).success(function(data) {
-            if (!data.success) {
-                // if not successful, bind errors to error variables
-                $scope.errorName = data.errors.name;
-                $scope.errorSuperhero = data.errors.superheroAlias;
-            } else {
+            if (data.success) {
                 // if successful, bind success message to message
                 $scope.message = data.message;
             }
@@ -191,8 +158,7 @@ app.controller('OptionsCtrl', function($scope, localStorageService) {
 
     $scope.options = localStorageService.get('options') || {
         heatmapColor: 'Cool',
-        weightData: true,
-        displayAds: true,
+        displayAds: true
     };
 
     $scope.$watch("options", function() {
