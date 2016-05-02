@@ -1,1 +1,19 @@
 /* Empty. Add your own CSS if you like */
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.scroll {
+  height: 100%;
+}
+
+.bar-parking {
+	background: #36d7b7 !important;
+	border-bottom: 1px solid #335e82 !important;
+}
+
+.bar-parking-inverse{
+	background: #335e82 !important;
+	border-bottom: 1px solid #36d7b7 !important;
+}
