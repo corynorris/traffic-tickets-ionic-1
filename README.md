@@ -1,4 +1,4 @@
-# traffic-tickets-ionic-1
+# Traffic Tickets (Ionic 1)
 ## Overview
 An `Ionic 1` project with `AngularJS (1.5)` that demonstrates user interaction, google maps, and advanced map features such as heatmaps.
 
